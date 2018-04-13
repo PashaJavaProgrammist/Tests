@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var isHistoryVisible = false
 
-
     private val operators = arrayOf("+", "-", "*", "/")
 
     private var calculatedExpression = ""
@@ -51,10 +50,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             bt8 -> clickNumber(8)
             bt9 -> clickNumber(9)
 
-            btAdd -> clickoperation(CODE_ADD)
-            btDiv -> clickoperation(CODE_DIV)
-            btMult -> clickoperation(CODE_MULT)
-            btSub -> clickoperation(CODE_SUB)
+            btAdd -> clickOperation(CODE_ADD)
+            btDiv -> clickOperation(CODE_DIV)
+            btMult -> clickOperation(CODE_MULT)
+            btSub -> clickOperation(CODE_SUB)
 
             btIs -> clickResult()
             btClearLast -> clickClearLast()
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun clickoperation(code: Int) {
+    private fun clickOperation(code: Int) {
         if (resultNum == null && secondNum == null) {
             if (firstNum != null) {
                 codeOperation = code
@@ -185,7 +184,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (resultNum == null) {
         }
     }
-
 
     private fun setVisibilityOfHistory() {
         if (!isHistoryVisible) {

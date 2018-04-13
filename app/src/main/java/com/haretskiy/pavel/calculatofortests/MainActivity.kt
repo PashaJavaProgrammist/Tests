@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var isHistoryVisible = false
 
     private val operators = arrayOf("+", "-", "*", "/")
-    private var operatationsHistory = arrayOf("+", "-", "*", "/")
+    private var operatationsHistory = arrayOf("")
 
     private var calculatedExpression = ""
 

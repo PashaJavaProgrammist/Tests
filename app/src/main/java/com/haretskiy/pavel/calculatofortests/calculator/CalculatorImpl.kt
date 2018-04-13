@@ -1,4 +1,4 @@
-package com.haretskiy.pavel.calculatofortests
+package com.haretskiy.pavel.calculatofortests.calculator
 
 class CalculatorImpl : Calculator {
 

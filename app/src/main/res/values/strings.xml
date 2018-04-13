@@ -15,7 +15,8 @@
     <string name="_1">1</string>
     <string name="_0">0</string>
     <string name="is">=</string>
-    <string name="last">Clear Last</string>
-    <string name="all">Clear All</string>
+    <string name="all">Clear all</string>
     <string name="his">History</string>
+    <string name="clear"><![CDATA[<-]]></string>
+    <string name="byzero">Divide by zero</string>
 </resources>

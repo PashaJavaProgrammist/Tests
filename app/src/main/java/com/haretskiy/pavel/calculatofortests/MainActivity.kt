@@ -4,6 +4,8 @@ import android.arch.persistence.room.Room
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.haretskiy.pavel.calculatofortests.calculator.Calculator
+import com.haretskiy.pavel.calculatofortests.calculator.CalculatorImpl
 import com.haretskiy.pavel.calculatofortests.store.Database
 import com.haretskiy.pavel.calculatofortests.store.Store
 import com.haretskiy.pavel.calculatofortests.store.StoreImpl
@@ -158,14 +160,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun clickResult() {
+        var res = ""
         if (codeOperation != null && secondNum != null) {
             when (codeOperation) {
                 CODE_ADD -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.plus(it) } })
                 CODE_SUB -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.minus(it) } })
                 CODE_MULT -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
-                CODE_DIV -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
+                CODE_DIV -> {
+                    if (secondNum == 0) res = getString(R.string.byzero)
+                    else resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
+                }
             }
-            val res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
+            if (secondNum != 0) res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
             printInCalculatorWindow(res)
             store.saveOperationInHistory(res)
         }
@@ -195,7 +201,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 codeOperation != null -> {
                     codeOperation = null
-                    calculatedExpression=firstNum.toString()
+                    calculatedExpression = firstNum.toString()
                     printInCalculatorWindow("$firstNum")
                 }
                 firstNum != null -> {

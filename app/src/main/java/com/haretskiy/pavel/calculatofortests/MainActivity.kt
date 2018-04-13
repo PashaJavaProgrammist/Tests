@@ -87,50 +87,50 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun makeButtonsVisible() {
-        bt0.visibility=View.VISIBLE
-        bt1.visibility=View.VISIBLE
-        bt2.visibility=View.VISIBLE
-        bt3.visibility=View.VISIBLE
-        bt4.visibility=View.VISIBLE
-        bt5.visibility=View.VISIBLE
-        bt6.visibility=View.VISIBLE
-        bt7.visibility=View.VISIBLE
-        bt8.visibility=View.VISIBLE
-        bt9.visibility=View.VISIBLE
+        bt0.visibility = View.VISIBLE
+        bt1.visibility = View.VISIBLE
+        bt2.visibility = View.VISIBLE
+        bt3.visibility = View.VISIBLE
+        bt4.visibility = View.VISIBLE
+        bt5.visibility = View.VISIBLE
+        bt6.visibility = View.VISIBLE
+        bt7.visibility = View.VISIBLE
+        bt8.visibility = View.VISIBLE
+        bt9.visibility = View.VISIBLE
 
-        btAdd.visibility=View.VISIBLE
-        btDiv.visibility=View.VISIBLE
-        btMult.visibility=View.VISIBLE
-        btSub.visibility=View.VISIBLE
+        btAdd.visibility = View.VISIBLE
+        btDiv.visibility = View.VISIBLE
+        btMult.visibility = View.VISIBLE
+        btSub.visibility = View.VISIBLE
 
-        btIs.visibility=View.VISIBLE
-        btClearAll.visibility=View.VISIBLE
-        btClearLast.visibility=View.VISIBLE
+        btIs.visibility = View.VISIBLE
+        btClearAll.visibility = View.VISIBLE
+        btClearLast.visibility = View.VISIBLE
 
-        textView.visibility=View.VISIBLE
+        textView.visibility = View.VISIBLE
     }
 
     private fun makeButtonsInvisible() {
-        bt0.visibility=View.GONE
-        bt1.visibility=View.GONE
-        bt2.visibility=View.GONE
-        bt3.visibility=View.GONE
-        bt4.visibility=View.GONE
-        bt5.visibility=View.GONE
-        bt6.visibility=View.GONE
-        bt7.visibility=View.GONE
-        bt8.visibility=View.GONE
-        bt9.visibility=View.GONE
+        bt0.visibility = View.GONE
+        bt1.visibility = View.GONE
+        bt2.visibility = View.GONE
+        bt3.visibility = View.GONE
+        bt4.visibility = View.GONE
+        bt5.visibility = View.GONE
+        bt6.visibility = View.GONE
+        bt7.visibility = View.GONE
+        bt8.visibility = View.GONE
+        bt9.visibility = View.GONE
 
-        btAdd.visibility=View.GONE
-        btDiv.visibility=View.GONE
-        btMult.visibility=View.GONE
-        btSub.visibility=View.GONE
+        btAdd.visibility = View.GONE
+        btDiv.visibility = View.GONE
+        btMult.visibility = View.GONE
+        btSub.visibility = View.GONE
 
-        btIs.visibility=View.GONE
-        btClearAll.visibility=View.GONE
-        btClearLast.visibility=View.GONE
-        textView.visibility=View.GONE
+        btIs.visibility = View.GONE
+        btClearAll.visibility = View.GONE
+        btClearLast.visibility = View.GONE
+        textView.visibility = View.GONE
 
     }
 
@@ -182,6 +182,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun clickClearLast() {
         if (resultNum == null) {
+            when (true) {
+                secondNum != null -> {
+                    calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
+                    if (calculatedExpression.isEmpty()) {
+                        secondNum = null
+                        printInCalculatorWindow("$firstNum${operators[codeOperation!!]}")
+                    } else {
+                        secondNum = calculatedExpression.toInt()
+                        printInCalculatorWindow("$firstNum${operators[codeOperation!!]}$secondNum")
+                    }
+                }
+                codeOperation != null -> {
+                    codeOperation = null
+                    calculatedExpression=firstNum.toString()
+                    printInCalculatorWindow("$firstNum")
+                }
+                firstNum != null -> {
+                    calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
+                    if (calculatedExpression.isEmpty()) {
+                        firstNum = null
+                        printInCalculatorWindow("")
+                    } else {
+                        firstNum = calculatedExpression.toInt()
+                        printInCalculatorWindow("$firstNum")
+                    }
+                }
+            }
         }
     }
 

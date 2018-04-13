@@ -24,17 +24,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var isHistoryVisible = false
 
-    private val operators = arrayOf("+", "-", "*", "/")
-    private var operatationsHistory = arrayOf("")
+    private val operators = arrayOf(PLUS, MINUS, MULTIPLE, DIVIDE)
+    private var operatationsHistory = emptyArray<String>()
 
-    private var calculatedExpression = ""
+    private var calculatedExpression = EMPTY
 
     private val calculator: Calculator by lazy {
         CalculatorImpl()
     }
 
     private val store: Store by lazy {
-        StoreImpl(Room.databaseBuilder(applicationContext, Database::class.java, DBNAME).allowMainThreadQueries().build().storeDao())
+        StoreImpl(Room.databaseBuilder(applicationContext, Database::class.java, DB_NAME).allowMainThreadQueries().build().storeDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +59,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             bt9 -> clickNumber(9)
 
             btAdd -> clickOperation(CODE_ADD)
-            btDiv -> clickOperation(CODE_DIV)
-            btMult -> clickOperation(CODE_MULT)
+            btDiv -> clickOperation(CODE_DIVIDE)
+            btMult -> clickOperation(CODE_MULTIPLE)
             btSub -> clickOperation(CODE_SUB)
 
             btIs -> clickResult()
@@ -166,20 +166,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (resultNum == null && secondNum == null) {
             if (firstNum != null) {
                 codeOperation = code
-                calculatedExpression = ""
+                calculatedExpression = EMPTY
                 printInCalculatorWindow("$firstNum ${operators[codeOperation!!]}")
             }
         }
     }
 
     private fun clickResult() {
-        var res = ""
+        var res = EMPTY
         if (codeOperation != null && secondNum != null) {
             when (codeOperation) {
                 CODE_ADD -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.plus(it) } })
                 CODE_SUB -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.minus(it) } })
-                CODE_MULT -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
-                CODE_DIV -> {
+                CODE_MULTIPLE -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
+                CODE_DIVIDE -> {
                     if (secondNum == 0f) res = getString(R.string.byzero)
                     else resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
                 }
@@ -191,12 +191,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun clickClearAll() {
-        calculatedExpression = ""
+        calculatedExpression = EMPTY
         firstNum = null
         secondNum = null
         resultNum = null
         codeOperation = null
-        printInCalculatorWindow("")
+        printInCalculatorWindow(EMPTY)
     }
 
     private fun clickClearLast() {
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
                     if (calculatedExpression.isEmpty()) {
                         firstNum = null
-                        printInCalculatorWindow("")
+                        printInCalculatorWindow(EMPTY)
                     } else {
                         firstNum = calculatedExpression.toFloat()
                         printInCalculatorWindow("$firstNum")

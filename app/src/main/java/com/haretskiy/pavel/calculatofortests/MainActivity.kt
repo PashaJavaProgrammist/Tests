@@ -13,10 +13,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private var firstNum: Int? = null
-    private var secondNum: Int? = null
+    private var firstNum: Float? = null
+    private var secondNum: Float? = null
     private var codeOperation: Int? = null
-    private var resultNum: Int? = null
+    private var resultNum: Float? = null
 
     private var isHistoryVisible = false
 
@@ -140,10 +140,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (resultNum == null) {
             calculatedExpression += num
             if (codeOperation == null) {
-                firstNum = calculatedExpression.toInt()
+                firstNum = calculatedExpression.toFloat()
                 printInCalculatorWindow(firstNum.toString())
             } else {
-                secondNum = calculatedExpression.toInt()
+                secondNum = calculatedExpression.toFloat()
                 printInCalculatorWindow("$firstNum ${operators[codeOperation!!]} $secondNum")
             }
         }
@@ -167,11 +167,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 CODE_SUB -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.minus(it) } })
                 CODE_MULT -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
                 CODE_DIV -> {
-                    if (secondNum == 0) res = getString(R.string.byzero)
+                    if (secondNum == 0f) res = getString(R.string.byzero)
                     else resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
                 }
             }
-            if (secondNum != 0) res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
+            if (secondNum != 0f) res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
             printInCalculatorWindow(res)
             store.saveOperationInHistory(res)
         }
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         secondNum = null
                         printInCalculatorWindow("$firstNum${operators[codeOperation!!]}")
                     } else {
-                        secondNum = calculatedExpression.toInt()
+                        secondNum = calculatedExpression.toFloat()
                         printInCalculatorWindow("$firstNum${operators[codeOperation!!]}$secondNum")
                     }
                 }
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         firstNum = null
                         printInCalculatorWindow("")
                     } else {
-                        firstNum = calculatedExpression.toInt()
+                        firstNum = calculatedExpression.toFloat()
                         printInCalculatorWindow("$firstNum")
                     }
                 }

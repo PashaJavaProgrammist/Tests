@@ -246,6 +246,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun clickHistory() {
         setVisibilityOfHistory()
         operatationsHistory = store.getAllOperationList().toTypedArray()
+        operatationsHistory.reverse()
         tvHistory.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, operatationsHistory)
         adapter?.notifyDataSetChanged()
     }

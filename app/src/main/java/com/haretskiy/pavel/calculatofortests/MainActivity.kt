@@ -1,8 +1,12 @@
 package com.haretskiy.pavel.calculatofortests
 
-import android.support.v7.app.AppCompatActivity
+import android.arch.persistence.room.Room
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.haretskiy.pavel.calculatofortests.store.Database
+import com.haretskiy.pavel.calculatofortests.store.Store
+import com.haretskiy.pavel.calculatofortests.store.StoreImpl
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -12,6 +16,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var codeOperation: Int? = null
     private var resultNum: Int? = null
 
+    private var isHistoryVisible = false
+
+
     private val operators = arrayOf("+", "-", "*", "/")
 
     private var calculatedExpression = ""
@@ -20,9 +27,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         CalculatorImpl()
     }
 
+    private val store: Store by lazy {
+        StoreImpl(Room.databaseBuilder(applicationContext, Database::class.java, "database").allowMainThreadQueries().build().storeDao())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         initListeners()
     }
 
@@ -75,6 +87,54 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btHistory.setOnClickListener(this)
     }
 
+    private fun makeButtonsVisible() {
+        bt0.visibility=View.VISIBLE
+        bt1.visibility=View.VISIBLE
+        bt2.visibility=View.VISIBLE
+        bt3.visibility=View.VISIBLE
+        bt4.visibility=View.VISIBLE
+        bt5.visibility=View.VISIBLE
+        bt6.visibility=View.VISIBLE
+        bt7.visibility=View.VISIBLE
+        bt8.visibility=View.VISIBLE
+        bt9.visibility=View.VISIBLE
+
+        btAdd.visibility=View.VISIBLE
+        btDiv.visibility=View.VISIBLE
+        btMult.visibility=View.VISIBLE
+        btSub.visibility=View.VISIBLE
+
+        btIs.visibility=View.VISIBLE
+        btClearAll.visibility=View.VISIBLE
+        btClearLast.visibility=View.VISIBLE
+
+        textView.visibility=View.VISIBLE
+    }
+
+    private fun makeButtonsInvisible() {
+        bt0.visibility=View.GONE
+        bt1.visibility=View.GONE
+        bt2.visibility=View.GONE
+        bt3.visibility=View.GONE
+        bt4.visibility=View.GONE
+        bt5.visibility=View.GONE
+        bt6.visibility=View.GONE
+        bt7.visibility=View.GONE
+        bt8.visibility=View.GONE
+        bt9.visibility=View.GONE
+
+        btAdd.visibility=View.GONE
+        btDiv.visibility=View.GONE
+        btMult.visibility=View.GONE
+        btSub.visibility=View.GONE
+
+        btIs.visibility=View.GONE
+        btClearAll.visibility=View.GONE
+        btClearLast.visibility=View.GONE
+        textView.visibility=View.GONE
+
+    }
+
     private fun clickNumber(num: Int) {
         if (resultNum == null) {
             calculatedExpression += num
@@ -106,7 +166,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 CODE_MULT -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
                 CODE_DIV -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
             }
-            printInCalculatorWindow("$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum")
+            val res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
+            printInCalculatorWindow(res)
+            store.saveOperationInHistory(res)
         }
     }
 
@@ -124,7 +186,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+
+    private fun setVisibilityOfHistory() {
+        if (!isHistoryVisible) {
+            frameHistory.visibility = View.VISIBLE
+            makeButtonsInvisible()
+            isHistoryVisible = true
+        } else {
+            frameHistory.visibility = View.GONE
+            makeButtonsVisible()
+            tvHistory.text = ""
+            isHistoryVisible = false
+        }
+    }
+
     private fun clickHistory() {
+        setVisibilityOfHistory()
+        store.getAllOperationList().forEach {
+            tvHistory.append(it + "\n")
+        }
+
     }
 
     private fun printInCalculatorWindow(text: String) {

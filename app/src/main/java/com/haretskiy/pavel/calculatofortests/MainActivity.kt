@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private val store: Store by lazy {
-        StoreImpl(Room.databaseBuilder(applicationContext, Database::class.java, "database").allowMainThreadQueries().build().storeDao())
+        StoreImpl(Room.databaseBuilder(applicationContext, Database::class.java, DBNAME).allowMainThreadQueries().build().storeDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,6 +191,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (!isHistoryVisible) {
             frameHistory.visibility = View.VISIBLE
             makeButtonsInvisible()
+            tvHistory.text = ""
             isHistoryVisible = true
         } else {
             frameHistory.visibility = View.GONE

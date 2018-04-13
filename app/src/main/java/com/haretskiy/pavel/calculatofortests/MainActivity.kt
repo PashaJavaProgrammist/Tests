@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initListView() {
-        tvHistory.setOnItemClickListener { parent, view, position, id ->
+        tvHistory.setOnItemClickListener { _, _, position, _ ->
             clickHistory()
             printInCalculatorWindow(operatationsHistory[position])
         }

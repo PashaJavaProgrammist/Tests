@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.ArrayAdapter
 import com.haretskiy.pavel.calculatofortests.calculator.Calculator
 import com.haretskiy.pavel.calculatofortests.calculator.CalculatorImpl
 import com.haretskiy.pavel.calculatofortests.store.Database
@@ -11,16 +12,20 @@ import com.haretskiy.pavel.calculatofortests.store.Store
 import com.haretskiy.pavel.calculatofortests.store.StoreImpl
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var firstNum: Float? = null
     private var secondNum: Float? = null
     private var codeOperation: Int? = null
     private var resultNum: Float? = null
+    private var adapter: ArrayAdapter<String>? = null
+
 
     private var isHistoryVisible = false
 
     private val operators = arrayOf("+", "-", "*", "/")
+    private var operatationsHistory = arrayOf("+", "-", "*", "/")
 
     private var calculatedExpression = ""
 
@@ -37,6 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         initListeners()
+        initListView()
     }
 
     override fun onClick(v: View?) {
@@ -62,6 +68,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             btClearAll -> clickClearAll()
             btHistory -> clickHistory()
 
+        }
+    }
+
+    private fun initListView() {
+        tvHistory.setOnItemClickListener { parent, view, position, id ->
+            clickHistory()
+            printInCalculatorWindow(operatationsHistory[position])
         }
     }
 
@@ -222,22 +235,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (!isHistoryVisible) {
             frameHistory.visibility = View.VISIBLE
             makeButtonsInvisible()
-            tvHistory.text = ""
             isHistoryVisible = true
         } else {
             frameHistory.visibility = View.GONE
             makeButtonsVisible()
-            tvHistory.text = ""
             isHistoryVisible = false
         }
     }
 
     private fun clickHistory() {
         setVisibilityOfHistory()
-        store.getAllOperationList().forEach {
-            tvHistory.append(it + "\n")
-        }
-
+        operatationsHistory = store.getAllOperationList().toTypedArray()
+        tvHistory.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, operatationsHistory)
+        adapter?.notifyDataSetChanged()
     }
 
     private fun printInCalculatorWindow(text: String) {

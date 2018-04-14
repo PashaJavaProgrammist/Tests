@@ -14,11 +14,11 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class CalculatorActivityTest {
 
     @Rule
     @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java)
+    val rule = ActivityTestRule(CalculatorActivity::class.java)
 
     @Test
     fun clickNumberBottomsTest() {

@@ -11,3 +11,4 @@ const val MULTIPLE = "*"
 const val DIVIDE = "/"
 const val EMPTY = ""
 const val EMPTY_CODE_OPERATION = -1
+const val BY_ZERO = "Divide by zero"

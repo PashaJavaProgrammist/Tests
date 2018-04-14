@@ -2,12 +2,12 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle" >
 
-    <!-- View background color -->
+    <!-- CalculatorView background color -->
     <solid
         android:color="@color/colorAccent" >
     </solid>
 
-    <!-- View border color and width -->
+    <!-- CalculatorView border color and width -->
     <stroke
         android:width="2dp"
         android:color="@color/colorPrimaryDark" >

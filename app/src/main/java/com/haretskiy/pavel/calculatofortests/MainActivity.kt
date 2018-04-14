@@ -15,12 +15,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private var firstNum: Float? = null
-    private var secondNum: Float? = null
-    private var codeOperation: Int? = null
-    private var resultNum: Float? = null
-    private var adapter: ArrayAdapter<String>? = null
+    private var firstNumStr = EMPTY
+    private var secondNumStr = EMPTY
+    private var firstNum: Float = 0f
+    private var secondNum: Float = 0f
 
+    private var resultNumStr = EMPTY
+    private var resultNum = 0f
+
+    private var codeOperation: Int = EMPTY_CODE_OPERATION
 
     private var isHistoryVisible = false
 
@@ -122,7 +125,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btClearAll.visibility = View.VISIBLE
         btClearLast.visibility = View.VISIBLE
 
-        textView.visibility = View.VISIBLE
+        calculatorDisplay.visibility = View.VISIBLE
     }
 
     private fun makeButtonsInvisible() {
@@ -145,46 +148,48 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btIs.visibility = View.GONE
         btClearAll.visibility = View.GONE
         btClearLast.visibility = View.GONE
-        textView.visibility = View.GONE
+        calculatorDisplay.visibility = View.GONE
 
     }
 
     private fun clickNumber(num: Int) {
-        if (resultNum == null) {
+        if (resultNumStr.isEmpty()) {
             calculatedExpression += num
-            if (codeOperation == null) {
-                firstNum = calculatedExpression.toFloat()
-                printInCalculatorWindow(firstNum.toString())
+            if (codeOperation == EMPTY_CODE_OPERATION) {
+                firstNumStr = calculatedExpression
+                printInCalculatorWindow(firstNumStr)
             } else {
-                secondNum = calculatedExpression.toFloat()
-                printInCalculatorWindow("$firstNum ${operators[codeOperation!!]} $secondNum")
+                secondNumStr = calculatedExpression
+                printInCalculatorWindow("$firstNumStr ${operators[codeOperation]} $secondNumStr")
             }
         }
     }
 
     private fun clickOperation(code: Int) {
-        if (resultNum == null && secondNum == null) {
-            if (firstNum != null) {
+        if (resultNumStr.isEmpty() && secondNumStr.isEmpty()) {
+            if (!firstNumStr.isEmpty()) {
                 codeOperation = code
                 calculatedExpression = EMPTY
-                printInCalculatorWindow("$firstNum ${operators[codeOperation!!]}")
+                printInCalculatorWindow("$firstNumStr ${operators[codeOperation]}")
             }
         }
     }
 
     private fun clickResult() {
         var res = EMPTY
-        if (codeOperation != null && secondNum != null) {
+        if (codeOperation != EMPTY_CODE_OPERATION && !secondNumStr.isEmpty()) {
+            firstNum = firstNumStr.toFloat()
+            secondNum = secondNumStr.toFloat()
             when (codeOperation) {
-                CODE_ADD -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.plus(it) } })
-                CODE_SUB -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.minus(it) } })
-                CODE_MULTIPLE -> resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.times(it) } })
+                CODE_ADD -> resultNum = calculator.addition(firstNum, secondNum)
+                CODE_SUB -> resultNum = calculator.subtraction(firstNum, secondNum)
+                CODE_MULTIPLE -> resultNum = calculator.multiplication(firstNum, secondNum)
                 CODE_DIVIDE -> {
                     if (secondNum == 0f) res = getString(R.string.byzero)
-                    else resultNum = calculator.calculate(firstNum, secondNum, { a, b -> b?.let { a?.div(it) } })
+                    else resultNum = calculator.divide(firstNum, secondNum)
                 }
             }
-            if (secondNum != 0f) res = "$firstNum ${operators[codeOperation!!]} $secondNum = $resultNum"
+            if (secondNum != 0f) res = "$firstNumStr ${operators[codeOperation]} $secondNumStr = $resultNum"
             printInCalculatorWindow(res)
             store.saveOperationInHistory(res)
         }
@@ -192,39 +197,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun clickClearAll() {
         calculatedExpression = EMPTY
-        firstNum = null
-        secondNum = null
-        resultNum = null
-        codeOperation = null
+        firstNumStr = EMPTY
+        secondNumStr = EMPTY
+        resultNumStr = EMPTY
+        codeOperation = EMPTY_CODE_OPERATION
         printInCalculatorWindow(EMPTY)
     }
 
     private fun clickClearLast() {
-        if (resultNum == null) {
+        if (resultNumStr.isEmpty()) {
             when (true) {
-                secondNum != null -> {
+                !secondNumStr.isEmpty() -> {
                     calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
                     if (calculatedExpression.isEmpty()) {
-                        secondNum = null
-                        printInCalculatorWindow("$firstNum${operators[codeOperation!!]}")
+                        secondNumStr = EMPTY
+                        printInCalculatorWindow("$firstNumStr${operators[codeOperation]}")
                     } else {
-                        secondNum = calculatedExpression.toFloat()
-                        printInCalculatorWindow("$firstNum${operators[codeOperation!!]}$secondNum")
+                        secondNumStr = calculatedExpression
+                        printInCalculatorWindow("$firstNumStr${operators[codeOperation]}$secondNumStr")
                     }
                 }
-                codeOperation != null -> {
-                    codeOperation = null
-                    calculatedExpression = firstNum.toString()
-                    printInCalculatorWindow("$firstNum")
+                codeOperation != EMPTY_CODE_OPERATION -> {
+                    codeOperation = EMPTY_CODE_OPERATION
+                    calculatedExpression = firstNumStr
+                    printInCalculatorWindow(firstNumStr)
                 }
-                firstNum != null -> {
+                !firstNumStr.isEmpty() -> {
                     calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
                     if (calculatedExpression.isEmpty()) {
-                        firstNum = null
+                        firstNumStr = EMPTY
                         printInCalculatorWindow(EMPTY)
                     } else {
-                        firstNum = calculatedExpression.toFloat()
-                        printInCalculatorWindow("$firstNum")
+                        firstNumStr = calculatedExpression
+                        printInCalculatorWindow(firstNumStr)
                     }
                 }
             }
@@ -248,10 +253,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         operatationsHistory = store.getAllOperationList().toTypedArray()
         operatationsHistory.reverse()
         tvHistory.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, operatationsHistory)
-        adapter?.notifyDataSetChanged()
     }
 
     private fun printInCalculatorWindow(text: String) {
-        textView.text = text
+        calculatorDisplay.text = text
     }
 }

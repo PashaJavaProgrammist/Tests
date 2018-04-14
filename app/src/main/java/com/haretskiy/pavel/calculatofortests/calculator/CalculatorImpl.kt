@@ -1,6 +1,6 @@
 package com.haretskiy.pavel.calculatofortests.calculator
 
-class CalculatorImpl : Calculator {
+open class CalculatorImpl : Calculator {
     override fun addition(a: Float, b: Float) = a + b
 
     override fun subtraction(a: Float, b: Float) = a - b

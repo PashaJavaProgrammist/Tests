@@ -92,10 +92,10 @@ class CalculatorPresenterImpl(private val calculator: Calculator, private val st
                     calculatedExpression = calculatedExpression.substring(0, calculatedExpression.length - 1)
                     if (calculatedExpression.isEmpty()) {
                         secondNumStr = EMPTY
-                        view?.printOnCalculatorDisplay("$firstNumStr${operators[codeOperation]}")
+                        view?.printOnCalculatorDisplay("$firstNumStr ${operators[codeOperation]}")
                     } else {
                         secondNumStr = calculatedExpression
-                        view?.printOnCalculatorDisplay("$firstNumStr${operators[codeOperation]}$secondNumStr")
+                        view?.printOnCalculatorDisplay("$firstNumStr ${operators[codeOperation]} $secondNumStr")
                     }
                 }
                 codeOperation != EMPTY_CODE_OPERATION -> {

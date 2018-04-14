@@ -89,15 +89,15 @@ class CalculatorActivity : AppCompatActivity(), View.OnClickListener, Calculator
     }
 
     override fun printOnCalculatorDisplay(text: String) {
-        calculatorDisplay.text = text
+        calculator_display.text = text
     }
 
     override fun setHistoryContent(history: Array<String>) {
-        tvHistory.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, history)
+        list_of_history.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, history)
     }
 
     private fun initListView() {
-        tvHistory.setOnItemClickListener { _, _, position, _ ->
+        list_of_history.setOnItemClickListener { _, _, position, _ ->
             presenter.clickHistory()
             presenter.clickHistoryItem(position)
         }
@@ -147,7 +147,7 @@ class CalculatorActivity : AppCompatActivity(), View.OnClickListener, Calculator
         btClearAll.visibility = View.VISIBLE
         btClearLast.visibility = View.VISIBLE
 
-        calculatorDisplay.visibility = View.VISIBLE
+        calculator_display.visibility = View.VISIBLE
     }
 
     private fun makeButtonsInvisible() {
@@ -170,7 +170,7 @@ class CalculatorActivity : AppCompatActivity(), View.OnClickListener, Calculator
         btIs.visibility = View.GONE
         btClearAll.visibility = View.GONE
         btClearLast.visibility = View.GONE
-        calculatorDisplay.visibility = View.GONE
+        calculator_display.visibility = View.GONE
 
     }
 

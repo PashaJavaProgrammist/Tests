@@ -43,6 +43,18 @@ class CalculatorTest {
         Assert.assertEquals(1.666f, res, 0.001f)
     }
 
+    @Test
+    fun testDivideZeroByNumber() {
+        val res = calculator.divide(0f, 3f)
+        Assert.assertEquals(0f, res)
+    }
+
+    @Test
+    fun testMultipleZeroByNumber() {
+        val res = calculator.divide(0f, 4f)
+        Assert.assertEquals(0f, res)
+    }
+
     @Test(expected = IllegalArgumentException::class)
     fun testDivideByZero() {
         calculator.divide(5f, 0f)

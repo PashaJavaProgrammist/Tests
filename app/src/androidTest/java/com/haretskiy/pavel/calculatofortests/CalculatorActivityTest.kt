@@ -29,6 +29,37 @@ class CalculatorActivityTest {
         onView(withText("3")).perform(click())
         onView(withText("7")).perform(click())
         onView(withText("=")).perform(click())
-        onView(withId(R.id.calculatorDisplay)).check(matches(ViewMatchers.withText("43 + 37 = 80.0")))
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withText("43 + 37 = 80.0")))
+    }
+
+    @Test
+    fun clickClearAllBottomTest() {
+        onView(withText("4")).perform(click())
+        onView(withText("+")).perform(click())
+        onView(withText("3")).perform(click())
+        onView(withText("=")).perform(click())
+        onView(withId(R.id.btClearAll)).perform(click())
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withText("")))
+    }
+
+    @Test
+    fun clickClearBottomTest() {
+        onView(withText("4")).perform(click())
+        onView(withText("+")).perform(click())
+        onView(withText("3")).perform(click())
+        onView(withId(R.id.btClearLast)).perform(click())
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withText("4 +")))
+        onView(withId(R.id.btClearLast)).perform(click())
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withText("4")))
+    }
+
+    @Test
+    fun clickHistoryTest() {
+        onView(withText("History")).perform(click())
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.list_of_history)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withText("History")).perform(click())
+        onView(withId(R.id.calculator_display)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.list_of_history)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
 }

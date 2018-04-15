@@ -11,6 +11,6 @@ interface StoreDao {
     val all: List<Operation>
 
     @Insert
-    fun insert(employee: Operation)
+    fun insert(operation: Operation)
 
 }

@@ -69,17 +69,17 @@ class PresenterTest {
     fun getFromStoreTest() {
         calculatorPresenter.clickHistory()
         verify(mockedStore).getAllOperationList()
-        calculatorPresenter.clickHistoryItem(0)
+        calculatorPresenter.clickHistoryItem(POSITION_FOR_TEST)
 
     }
 
     //This test is testing getting item from history
     @Test
     fun getItemFromStoreTest() {
-        `when`(mockedStore.getAllOperationList()).thenReturn(arrayListOf(""))
+        `when`(mockedStore.getAllOperationList()).thenReturn(arrayListOf(TEST))
         calculatorPresenter.attachView(mockedView)
         calculatorPresenter.clickHistory()
-        calculatorPresenter.clickHistoryItem(0)
+        calculatorPresenter.clickHistoryItem(POSITION_FOR_TEST)
         verify(mockedView).printOnCalculatorDisplay(ArgumentMatchers.anyString())
     }
 

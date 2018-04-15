@@ -1,12 +1,12 @@
 package com.haretskiy.pavel.calculatofortests
 
+import com.haretskiy.pavel.calculatofortests.store.Operation
 import com.haretskiy.pavel.calculatofortests.store.StoreDao
 import com.haretskiy.pavel.calculatofortests.store.StoreDao_Impl
 import com.haretskiy.pavel.calculatofortests.store.StoreImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
@@ -34,9 +34,9 @@ class StoreTest {
 
     @Test
     fun insertDataTest() {
-        store.saveOperationInHistory(anyString())
-        // This doesn't work why??
-//        verify(mockedStoreDao).insert(ArgumentMatchers.any(Operation::class.java))
+        store.saveOperationInHistory(TEST)
+        val operation = Operation(PALACEBO_ID, TEST)
+        verify(mockedStoreDao).insert(operation)
     }
 
 }

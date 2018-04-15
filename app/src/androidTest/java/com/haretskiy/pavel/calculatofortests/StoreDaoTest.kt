@@ -41,13 +41,13 @@ class StoreDaoTest {
     @Throws(Exception::class)
     fun insertOperationThenReadTheSameOneTest() {
 
-        val operationToInsert = Operation(0, "Test")
+        val operationToInsert = Operation(0, TEST)
 
         storeDao.insert(operationToInsert)
         val operationsListPostInsert = storeDao.all
 
         assertEquals(1, operationsListPostInsert.size)
-        assertTrue(operationsListPostInsert[0].operation == "Test")
+        assertTrue(operationsListPostInsert[0].operation == TEST)
     }
 
 }

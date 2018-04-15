@@ -12,3 +12,6 @@ const val DIVIDE = "/"
 const val EMPTY = ""
 const val EMPTY_CODE_OPERATION = -1
 const val BY_ZERO = "Divide by zero"
+const val TEST = "Test"
+const val PALACEBO_ID = 0L
+const val POSITION_FOR_TEST = 0

@@ -13,8 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -44,6 +43,7 @@ class PresenterTest {
 
     }
 
+    //This test is testing attaching and detaching view to presenter
     @Test
     fun viewAttachDetachTest() {
         calculatorPresenter.view = null
@@ -53,6 +53,7 @@ class PresenterTest {
         assertEquals(null, calculatorPresenter.view)
     }
 
+    //This test is testing saving history in db in presenter
     @Test
     fun savingInStoreTest() {
         calculatorPresenter.clickNumber(1)
@@ -63,10 +64,55 @@ class PresenterTest {
         verify(mockedStore).saveOperationInHistory(ArgumentMatchers.anyString())
     }
 
+    //This test is testing getting history from db in presenter
     @Test
     fun getFromStoreTest() {
         calculatorPresenter.clickHistory()
         verify(mockedStore).getAllOperationList()
+        calculatorPresenter.clickHistoryItem(0)
+
+    }
+
+    //This test is testing getting item from history
+    @Test
+    fun getItemFromStoreTest() {
+        `when`(mockedStore.getAllOperationList()).thenReturn(arrayListOf(""))
+        calculatorPresenter.attachView(mockedView)
+        calculatorPresenter.clickHistory()
+        calculatorPresenter.clickHistoryItem(0)
+        verify(mockedView).printOnCalculatorDisplay(ArgumentMatchers.anyString())
+    }
+
+    //This test is testing calling calculator methods in presenter
+    @Test
+    fun calculatorOperationsTest() {
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickOperation(CODE_ADD)
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickResult()
+        verify(mockedCalculator).addition(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        calculatorPresenter.clickClearAll()
+
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickOperation(CODE_SUB)
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickResult()
+        verify(mockedCalculator).subtraction(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        calculatorPresenter.clickClearAll()
+
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickOperation(CODE_MULTIPLE)
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickResult()
+        verify(mockedCalculator).multiplication(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        calculatorPresenter.clickClearAll()
+
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickOperation(CODE_DIVIDE)
+        calculatorPresenter.clickNumber(1)
+        calculatorPresenter.clickResult()
+        verify(mockedCalculator).divide(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        calculatorPresenter.clickClearAll()
     }
 
 }

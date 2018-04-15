@@ -47,7 +47,7 @@ class StoreDaoTest {
         val operationsListPostInsert = storeDao.all
 
         assertEquals(1, operationsListPostInsert.size)
-        assertTrue(operationsListPostInsert[0].operation.equals("Test"))
+        assertTrue(operationsListPostInsert[0].operation == "Test")
     }
 
 }
